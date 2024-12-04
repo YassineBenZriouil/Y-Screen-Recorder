@@ -1,0 +1,84 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #121212;
+    color: #e0e0e0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+}
+
+h1 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    color: #fff;
+}
+.tit_Img {
+    display: flex;
+    flex-direction: row;
+}
+
+video {
+    width: 100%;
+    max-width: 600px;
+    border: 2px solid #444;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+button {
+    padding: 10px 20px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 8px;
+    margin: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+#startBtn {
+    background-color: #2196f3; /* Blue */
+    color: white;
+}
+
+#startBtn:hover {
+    background-color: #1976d2;
+}
+
+#stopBtn {
+    background-color: #f44336; /* Red */
+    color: white;
+}
+
+#stopBtn:hover {
+    background-color: #d32f2f;
+}
+
+#videoSelectBtn {
+    background-color: transparent;
+    color: #2196f3; /* Blue */
+    border: 2px solid #2196f3;
+}
+
+#videoSelectBtn:hover {
+    background-color: #1976d2;
+    color: white;
+}
+
+hr {
+    width: 80%;
+    border: 1px solid #444;
+    margin: 20px 0;
+}
