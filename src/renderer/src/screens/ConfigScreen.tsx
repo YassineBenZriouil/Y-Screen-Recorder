@@ -5,7 +5,7 @@ import { Field } from "../components/Field";
 import { SectionHeader } from "../components/SectionHeader";
 import { Glyph } from "../components/Glyph";
 import { useApp } from "../state";
-import type { CodecId, CountdownSecs, QualityId } from "../types";
+import type { BitratePreset, CodecId, CountdownSecs, PipCorner, QualityId } from "../types";
 
 const CODECS: readonly { value: CodecId; label: string; hint?: string }[] = [
     { value: "vp9", label: "VP9", hint: "Best compression" },
@@ -25,9 +25,25 @@ const QUALITIES: readonly { value: QualityId; label: string; hint?: string }[] =
     { value: "qhd", label: "1440p" },
 ] as const;
 
+const BITRATES: readonly { value: BitratePreset; label: string; hint: string }[] = [
+    { value: "standard", label: "Standard", hint: "4 Mbps · 30 FPS" },
+    { value: "high",     label: "High",     hint: "6 Mbps · 60 FPS" },
+    { value: "lossless", label: "Lossless", hint: "20 Mbps · 60 FPS" },
+] as const;
+
+const CORNERS: readonly { value: PipCorner; label: string }[] = [
+    { value: "tl", label: "TL" },
+    { value: "tr", label: "TR" },
+    { value: "bl", label: "BL" },
+    { value: "br", label: "BR" },
+] as const;
+
 export function ConfigScreen() {
     const { state, dispatch, go } = useApp();
-    const { settings, source } = state;
+    const { runtime, source } = state;
+
+    const patch = (p: Partial<typeof runtime>) =>
+        dispatch({ type: "PATCH_RUNTIME", patch: p });
 
     return (
         <section className="screen screen--config">
@@ -36,16 +52,11 @@ export function ConfigScreen() {
                 title="Set up the take"
                 description={
                     source
-                        ? `Recording “${source.name}”. Adjust audio, quality, and countdown.`
+                        ? `Recording “${source.name}”. Adjust audio, encode, overlays.`
                         : "Choose a source first."
                 }
                 right={
-                    <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => go("source")}
-                        iconLeft={<Glyph name="back" />}
-                    >
+                    <Button variant="ghost" size="sm" onClick={() => go("source")} iconLeft={<Glyph name="back" />}>
                         Change source
                     </Button>
                 }
@@ -54,26 +65,10 @@ export function ConfigScreen() {
             <div className="fields">
                 <Field ordinal="A" label="Audio inputs" help="Mix any combination.">
                     <div className="row-inline">
-                        <Pill
-                            active={settings.mic}
-                            onClick={() =>
-                                dispatch({
-                                    type: "SET_SETTINGS",
-                                    patch: { mic: !settings.mic },
-                                })
-                            }
-                        >
+                        <Pill active={runtime.mic} onClick={() => patch({ mic: !runtime.mic })}>
                             Microphone
                         </Pill>
-                        <Pill
-                            active={settings.system}
-                            onClick={() =>
-                                dispatch({
-                                    type: "SET_SETTINGS",
-                                    patch: { system: !settings.system },
-                                })
-                            }
-                        >
+                        <Pill active={runtime.system} onClick={() => patch({ system: !runtime.system })}>
                             System audio
                         </Pill>
                     </div>
@@ -81,52 +76,75 @@ export function ConfigScreen() {
 
                 <Field ordinal="B" label="Encode" help="Codec inside a .webm container.">
                     <Segment<CodecId>
-                        value={settings.codec}
+                        value={runtime.codec}
                         options={CODECS}
-                        onChange={(codec) =>
-                            dispatch({ type: "SET_SETTINGS", patch: { codec } })
-                        }
+                        onChange={(codec) => patch({ codec })}
                     />
                 </Field>
 
-                <Field ordinal="C" label="Capture size" help="Target resolution.">
+                <Field ordinal="C" label="Resolution" help="Target capture size.">
                     <Segment<QualityId>
-                        value={settings.quality}
+                        value={runtime.quality}
                         options={QUALITIES}
-                        onChange={(quality) =>
-                            dispatch({ type: "SET_SETTINGS", patch: { quality } })
-                        }
+                        onChange={(quality) => patch({ quality })}
                     />
                 </Field>
 
-                <Field ordinal="D" label="Countdown" help="Buffer before recording starts.">
-                    <Segment<string>
-                        value={String(settings.countdown)}
-                        options={COUNTDOWN}
-                        onChange={(v) =>
-                            dispatch({
-                                type: "SET_SETTINGS",
-                                patch: { countdown: Number(v) as CountdownSecs },
-                            })
-                        }
+                <Field ordinal="D" label="Bitrate / FPS" help="Higher = larger files.">
+                    <Segment<BitratePreset>
+                        value={runtime.bitrate}
+                        options={BITRATES}
+                        onChange={(bitrate) => patch({ bitrate })}
                     />
                 </Field>
+
+                <Field ordinal="E" label="Countdown" help="Buffer before recording starts.">
+                    <Segment<string>
+                        value={String(runtime.countdown)}
+                        options={COUNTDOWN}
+                        onChange={(v) => patch({ countdown: Number(v) as CountdownSecs })}
+                    />
+                </Field>
+
+                <Field ordinal="F" label="Overlays" help="Compose extras directly into the recording (uses canvas — costs some CPU).">
+                    <div className="row-inline">
+                        <Pill
+                            active={runtime.cursorHighlight}
+                            onClick={() => patch({ cursorHighlight: !runtime.cursorHighlight })}
+                        >
+                            Cursor highlight
+                        </Pill>
+                        <Pill
+                            active={runtime.keystrokeOverlay}
+                            onClick={() => patch({ keystrokeOverlay: !runtime.keystrokeOverlay })}
+                        >
+                            Keystrokes
+                        </Pill>
+                        <Pill
+                            active={runtime.webcam}
+                            onClick={() => patch({ webcam: !runtime.webcam })}
+                        >
+                            Webcam PiP
+                        </Pill>
+                    </div>
+                </Field>
+
+                {runtime.webcam ? (
+                    <Field ordinal="G" label="Webcam corner" help="Where the PiP sits.">
+                        <Segment<PipCorner>
+                            value={runtime.webcamCorner}
+                            options={CORNERS}
+                            onChange={(webcamCorner) => patch({ webcamCorner })}
+                        />
+                    </Field>
+                ) : null}
             </div>
 
             <footer className="screen__foot">
-                <Button
-                    variant="ghost"
-                    onClick={() => go("source")}
-                    iconLeft={<Glyph name="back" />}
-                >
+                <Button variant="ghost" onClick={() => go("source")} iconLeft={<Glyph name="back" />}>
                     Back
                 </Button>
-                <Button
-                    variant="primary"
-                    size="lg"
-                    onClick={() => go("ready")}
-                    iconRight={<Glyph name="forward" />}
-                >
+                <Button variant="primary" size="lg" onClick={() => go("ready")} iconRight={<Glyph name="forward" />}>
                     Continue
                 </Button>
             </footer>

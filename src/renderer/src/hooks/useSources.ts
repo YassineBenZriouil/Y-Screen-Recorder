@@ -1,13 +1,13 @@
 import { useCallback, useEffect, useState } from "react";
 import type { SourceInfo } from "../types";
 
-export function useSources(autoLoad = true) {
+export function useSources(autoRefreshMs = 5000) {
     const [sources, setSources] = useState<SourceInfo[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
 
-    const refresh = useCallback(async () => {
-        setLoading(true);
+    const refresh = useCallback(async (silent = false) => {
+        if (!silent) setLoading(true);
         setError(null);
         try {
             const list = await window.yrec.listSources();
@@ -15,13 +15,16 @@ export function useSources(autoLoad = true) {
         } catch (e) {
             setError(e instanceof Error ? e.message : "Failed to load sources");
         } finally {
-            setLoading(false);
+            if (!silent) setLoading(false);
         }
     }, []);
 
     useEffect(() => {
-        if (autoLoad) refresh();
-    }, [autoLoad, refresh]);
+        void refresh(false);
+        if (autoRefreshMs <= 0) return;
+        const id = window.setInterval(() => void refresh(true), autoRefreshMs);
+        return () => clearInterval(id);
+    }, [refresh, autoRefreshMs]);
 
     return { sources, loading, error, refresh };
 }

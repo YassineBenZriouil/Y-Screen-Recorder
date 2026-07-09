@@ -12,7 +12,7 @@ interface Props {
 
 export function ReadyScreen({ onArm }: Props) {
     const { state, go } = useApp();
-    const { source, settings } = state;
+    const { source, runtime } = state;
 
     useHotkeys({
         r: () => onArm(),
@@ -22,17 +22,20 @@ export function ReadyScreen({ onArm }: Props) {
     if (!source) {
         return (
             <section className="screen screen--ready">
-                <div className="empty">No source selected. Go back and pick one.</div>
-                <Button variant="ghost" onClick={() => go("source")}>
-                    Choose source
-                </Button>
+                <div className="empty">No source selected.</div>
+                <Button variant="ghost" onClick={() => go("source")}>Choose source</Button>
             </section>
         );
     }
 
     const audioLabel =
-        [settings.mic && "Mic", settings.system && "System"].filter(Boolean).join(" + ") ||
-        "No audio";
+        [runtime.mic && "Mic", runtime.system && "System"].filter(Boolean).join(" + ") || "No audio";
+
+    const overlays = [
+        runtime.cursorHighlight && "cursor",
+        runtime.keystrokeOverlay && "keys",
+        runtime.webcam && `webcam (${runtime.webcamCorner.toUpperCase()})`,
+    ].filter(Boolean).join(" · ") || "None";
 
     return (
         <section className="screen screen--ready">
@@ -41,12 +44,7 @@ export function ReadyScreen({ onArm }: Props) {
                 title="Ready when you are"
                 description="Review the setup, then hit the button. R also works."
                 right={
-                    <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => go("config")}
-                        iconLeft={<Glyph name="back" />}
-                    >
+                    <Button variant="ghost" size="sm" onClick={() => go("config")} iconLeft={<Glyph name="back" />}>
                         Adjust
                     </Button>
                 }
@@ -69,21 +67,29 @@ export function ReadyScreen({ onArm }: Props) {
                     </div>
                     <div>
                         <dt>Encode</dt>
-                        <dd>{settings.codec.toUpperCase()}</dd>
+                        <dd>{runtime.codec.toUpperCase()}</dd>
                     </div>
                     <div>
-                        <dt>Size</dt>
+                        <dt>Resolution</dt>
                         <dd>
-                            {settings.quality === "hd"
-                                ? "1280 × 720"
-                                : settings.quality === "fullhd"
-                                ? "1920 × 1080"
-                                : "2560 × 1440"}
+                            {runtime.quality === "hd" ? "1280 × 720" :
+                             runtime.quality === "fullhd" ? "1920 × 1080" : "2560 × 1440"}
+                        </dd>
+                    </div>
+                    <div>
+                        <dt>Bitrate</dt>
+                        <dd>
+                            {runtime.bitrate === "standard" ? "4 Mbps / 30 FPS" :
+                             runtime.bitrate === "high" ? "6 Mbps / 60 FPS" : "20 Mbps / 60 FPS"}
                         </dd>
                     </div>
                     <div>
                         <dt>Countdown</dt>
-                        <dd>{settings.countdown === 0 ? "Off" : `${settings.countdown}s`}</dd>
+                        <dd>{runtime.countdown === 0 ? "Off" : `${runtime.countdown}s`}</dd>
+                    </div>
+                    <div>
+                        <dt>Overlays</dt>
+                        <dd>{overlays}</dd>
                     </div>
                 </dl>
             </div>
@@ -92,12 +98,7 @@ export function ReadyScreen({ onArm }: Props) {
                 <div className="foot-hint">
                     Press <Kbd>R</Kbd> to start
                 </div>
-                <Button
-                    variant="record"
-                    size="lg"
-                    onClick={onArm}
-                    iconLeft={<Glyph name="record" size={12} />}
-                >
+                <Button variant="record" size="lg" onClick={onArm} iconLeft={<Glyph name="record" size={12} />}>
                     Start recording
                 </Button>
             </footer>

@@ -1,35 +1,48 @@
-import type { SourceInfo } from "../../preload";
+import type {
+    SourceInfo,
+    Settings,
+    RecentTake,
+    Shortcuts,
+    ShortcutKey,
+    PipCorner,
+    BitratePreset,
+    CodecId,
+    QualityId,
+    Theme,
+    PermissionStatus,
+    MediaPermission,
+    AppInfo,
+} from "../../preload";
 
-export type { SourceInfo };
+export type {
+    SourceInfo,
+    Settings,
+    RecentTake,
+    Shortcuts,
+    ShortcutKey,
+    PipCorner,
+    BitratePreset,
+    CodecId,
+    QualityId,
+    Theme,
+    PermissionStatus,
+    MediaPermission,
+    AppInfo,
+};
 
 export type Step =
+    | "onboarding"
+    | "home"
     | "source"
     | "config"
     | "ready"
     | "countdown"
     | "recording"
     | "paused"
-    | "review";
+    | "review"
+    | "settings";
 
-export type CodecId = "vp9" | "vp8" | "h264";
 export type CountdownSecs = 0 | 3 | 5;
-export type QualityId = "hd" | "fullhd" | "qhd";
-
-export interface Settings {
-    mic: boolean;
-    system: boolean;
-    codec: CodecId;
-    countdown: CountdownSecs;
-    quality: QualityId;
-}
-
-export const DEFAULT_SETTINGS: Settings = {
-    mic: false,
-    system: false,
-    codec: "vp9",
-    countdown: 3,
-    quality: "fullhd",
-};
 
 export interface Take {
     blob: Blob;
@@ -41,6 +54,7 @@ export interface Take {
     sourceName: string;
     audioLabel: string;
     sizeBytes: number;
+    thumbnail?: string;
 }
 
 export interface ToastMsg {
@@ -49,4 +63,11 @@ export interface ToastMsg {
     kind: "info" | "success" | "error";
     actionLabel?: string;
     action?: () => void;
+}
+
+export interface OverlaySettings {
+    cursorHighlight: boolean;
+    keystrokeOverlay: boolean;
+    webcam: boolean;
+    webcamCorner: PipCorner;
 }

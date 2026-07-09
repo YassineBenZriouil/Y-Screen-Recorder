@@ -85,5 +85,14 @@ typings/
 # Webpack
 .webpack/
 
-# Electron-Forge
+# Electron build output
 out/
+
+# electron-builder distributables
+release/
+dist/
+
+# electron-builder cache
+.cache/electron/
+.cache/electron-builder/
+

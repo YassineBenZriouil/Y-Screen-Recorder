@@ -29,7 +29,7 @@ export function RecordingScreen({
     onDiscard,
 }: Props) {
     const { state } = useApp();
-    const { source, settings } = state;
+    const { source, runtime } = state;
     const isPaused = phase === "paused";
 
     useHotkeys({
@@ -38,7 +38,7 @@ export function RecordingScreen({
     });
 
     const audioLabel =
-        [settings.mic && "mic", settings.system && "system"]
+        [runtime.mic && "mic", runtime.system && "system"]
             .filter(Boolean)
             .join(" + ") || "no audio";
 
@@ -54,7 +54,7 @@ export function RecordingScreen({
                     <span className="dot-sep" />
                     <span>{audioLabel}</span>
                     <span className="dot-sep" />
-                    <span>{settings.codec.toUpperCase()}</span>
+                    <span>{runtime.codec.toUpperCase()}</span>
                 </div>
             </header>
 

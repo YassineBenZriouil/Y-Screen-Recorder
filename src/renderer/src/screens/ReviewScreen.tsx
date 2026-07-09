@@ -9,7 +9,9 @@ interface Props {
     onSave: () => void;
     onDiscard: () => void;
     onAgain: () => void;
+    onCopyBlob: () => void;
     saving: boolean;
+    autoSave: boolean;
 }
 
 function fmtBytes(n: number): string {
@@ -18,7 +20,7 @@ function fmtBytes(n: number): string {
     return `${(n / (1024 * 1024)).toFixed(1)} MB`;
 }
 
-export function ReviewScreen({ onSave, onDiscard, onAgain, saving }: Props) {
+export function ReviewScreen({ onSave, onDiscard, onAgain, onCopyBlob, saving, autoSave }: Props) {
     const { state } = useApp();
     const take = state.take;
 
@@ -31,7 +33,11 @@ export function ReviewScreen({ onSave, onDiscard, onAgain, saving }: Props) {
             <SectionHeader
                 eyebrow="Step 05 — Take complete"
                 title="Review, then save."
-                description="Scrub to preview. Save writes to disk with the extension you picked."
+                description={
+                    autoSave
+                        ? "Auto-save is on — the file will be written to your default folder."
+                        : "Scrub to preview. Save writes to disk."
+                }
             />
 
             <div className="review-grid">
@@ -61,6 +67,15 @@ export function ReviewScreen({ onSave, onDiscard, onAgain, saving }: Props) {
                         <div className="review-side__key">Size</div>
                         <div className="review-side__val">{fmtBytes(take.sizeBytes)}</div>
                     </div>
+                    <Button
+                        variant="ghost"
+                        size="sm"
+                        fullWidth
+                        onClick={onCopyBlob}
+                        iconLeft={<Glyph name="save" />}
+                    >
+                        Download to Downloads
+                    </Button>
                 </aside>
             </div>
 
@@ -78,7 +93,7 @@ export function ReviewScreen({ onSave, onDiscard, onAgain, saving }: Props) {
                     loading={saving}
                     iconLeft={<Glyph name="save" />}
                 >
-                    {saving ? "Saving…" : "Save recording"}
+                    {saving ? "Saving…" : autoSave ? "Save now" : "Save recording"}
                 </Button>
             </footer>
         </section>

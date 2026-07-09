@@ -65,3 +65,32 @@
     --fs-120: 120px;
     --fs-220: 220px;
 }
+
+/* ----------------------------------------------------------
+   Light theme override — applied to [data-theme="light"]
+   ---------------------------------------------------------- */
+[data-theme="light"] {
+    --void:      #f5f6f9;
+    --panel:     #ffffff;
+    --panel-2:   #f0f1f5;
+    --panel-3:   #e6e8ee;
+    --line:      #d9dce4;
+    --line-2:    #bec3d0;
+    --ink:       #10131c;
+    --ink-2:     #1e2432;
+    --dim:       #5b6478;
+    --dim-2:     #8f96a6;
+    --signal:    #dc1e46;
+    --signal-2:  #b81836;
+    --signal-glow: rgba(220, 30, 70, 0.22);
+    --phos:      #14a663;
+    --phos-dim:  #0e7d4a;
+    --phos-glow: rgba(20, 166, 99, 0.18);
+    --amber:     #b46e00;
+
+    --shadow-1: 0 1px 0 rgba(255, 255, 255, 0.6) inset,
+                0 4px 12px rgba(20, 30, 60, 0.08);
+    --shadow-lift: 0 20px 48px rgba(20, 30, 60, 0.16);
+    --shadow-focus: 0 0 0 3px var(--phos-glow);
+}
+

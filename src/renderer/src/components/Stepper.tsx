@@ -1,22 +1,24 @@
 import type { Step } from "../types";
 
 interface Node {
-    key: Exclude<Step, "countdown" | "paused">;
+    key: Exclude<Step, "countdown" | "paused" | "onboarding">;
     label: string;
     ordinal: string;
 }
 
 const NODES: Node[] = [
-    { key: "source", label: "Source", ordinal: "01" },
-    { key: "config", label: "Configure", ordinal: "02" },
-    { key: "ready", label: "Ready", ordinal: "03" },
-    { key: "recording", label: "Record", ordinal: "04" },
-    { key: "review", label: "Review", ordinal: "05" },
+    { key: "home",      label: "Home",      ordinal: "00" },
+    { key: "source",    label: "Source",    ordinal: "01" },
+    { key: "config",    label: "Configure", ordinal: "02" },
+    { key: "ready",     label: "Ready",     ordinal: "03" },
+    { key: "recording", label: "Record",    ordinal: "04" },
+    { key: "review",    label: "Review",    ordinal: "05" },
 ];
 
 function stepIndex(step: Step): number {
-    if (step === "countdown") return NODES.findIndex((n) => n.key === "recording");
-    if (step === "paused") return NODES.findIndex((n) => n.key === "recording");
+    if (step === "countdown" || step === "paused")
+        return NODES.findIndex((n) => n.key === "recording");
+    if (step === "settings" || step === "onboarding") return -1;
     return NODES.findIndex((n) => n.key === step);
 }
 

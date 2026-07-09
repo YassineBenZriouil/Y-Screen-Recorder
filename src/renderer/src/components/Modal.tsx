@@ -6,9 +6,10 @@ export interface ModalProps {
     onClose: () => void;
     children: ReactNode;
     ariaLabel?: string;
+    size?: "sm" | "md" | "lg";
 }
 
-export function Modal({ open, onClose, children, ariaLabel }: ModalProps) {
+export function Modal({ open, onClose, children, ariaLabel, size = "md" }: ModalProps) {
     useEffect(() => {
         if (!open) return;
         const onKey = (e: KeyboardEvent) => {
@@ -23,7 +24,7 @@ export function Modal({ open, onClose, children, ariaLabel }: ModalProps) {
     return (
         <div className="modal" role="dialog" aria-modal="true" aria-label={ariaLabel}>
             <div className="modal__backdrop" onClick={onClose} />
-            <div className="modal__card">{children}</div>
+            <div className={`modal__card modal__card--${size}`}>{children}</div>
         </div>
     );
 }

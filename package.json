@@ -1,17 +1,30 @@
 {
     "name": "y-rec",
-    "productName": "Y·REC",
-    "version": "2.0.0",
-    "description": "Y·REC — a distinctive screen recorder",
+    "productName": "Y-REC",
+    "version": "2.0.1",
+    "description": "Y-REC — a distinctive screen recorder",
     "main": "out/main/index.js",
-    "author": "Yassine Ben Zriouil",
+    "author": {
+        "name": "Yassine Ben Zriouil",
+        "email": "yassine.bz@flexiapps.net"
+    },
     "license": "MIT",
     "scripts": {
         "dev": "electron-vite dev",
         "start": "electron-vite preview",
         "build": "electron-vite build",
         "typecheck": "tsc --noEmit -p tsconfig.node.json && tsc --noEmit -p tsconfig.web.json",
-        "lint": "echo \"lint not configured\""
+        "lint": "echo \"lint not configured\"",
+        "postinstall": "electron-builder install-app-deps",
+        "bump": "npm --no-git-tag-version version patch",
+        "dist": "npm run bump && npm run build && electron-builder",
+        "dist:win": "npm run bump && npm run build && electron-builder --win",
+        "dist:mac": "npm run bump && npm run build && electron-builder --mac",
+        "dist:linux": "npm run bump && npm run build && electron-builder --linux",
+        "dist:all": "npm run bump && npm run build && electron-builder --win --mac --linux",
+        "release": "npm version patch -m \"release %s\" && git push && git push --tags",
+        "release:minor": "npm version minor -m \"release %s\" && git push && git push --tags",
+        "release:major": "npm version major -m \"release %s\" && git push && git push --tags"
     },
     "devDependencies": {
         "@types/node": "^20.11.24",
@@ -19,6 +32,7 @@
         "@types/react-dom": "^18.2.19",
         "@vitejs/plugin-react": "^4.2.1",
         "electron": "^30.0.9",
+        "electron-builder": "^24.13.3",
         "electron-vite": "^2.1.0",
         "typescript": "^5.3.3",
         "vite": "^5.1.4"
@@ -26,5 +40,115 @@
     "dependencies": {
         "react": "^18.2.0",
         "react-dom": "^18.2.0"
+    },
+    "build": {
+        "appId": "com.yassine.yrec",
+        "productName": "Y-REC",
+        "copyright": "Copyright © 2026 Yassine Ben Zriouil",
+        "directories": {
+            "output": "release/${version}",
+            "buildResources": "build"
+        },
+        "files": [
+            "out/**/*",
+            "public/**/*",
+            "package.json"
+        ],
+        "asar": true,
+        "asarUnpack": [
+            "public/**/*"
+        ],
+        "mac": {
+            "category": "public.app-category.video",
+            "target": [
+                {
+                    "target": "dmg",
+                    "arch": [
+                        "x64",
+                        "arm64"
+                    ]
+                },
+                {
+                    "target": "zip",
+                    "arch": [
+                        "x64",
+                        "arm64"
+                    ]
+                }
+            ],
+            "icon": "build/icon.png",
+            "artifactName": "${productName}-${version}-${arch}-mac.${ext}",
+            "darkModeSupport": true,
+            "extendInfo": {
+                "NSMicrophoneUsageDescription": "Y-REC needs microphone access to include your voice in recordings.",
+                "NSCameraUsageDescription": "Y-REC needs camera access for webcam picture-in-picture."
+            }
+        },
+        "dmg": {
+            "sign": false
+        },
+        "win": {
+            "target": [
+                {
+                    "target": "nsis",
+                    "arch": [
+                        "x64"
+                    ]
+                },
+                {
+                    "target": "portable",
+                    "arch": [
+                        "x64"
+                    ]
+                }
+            ],
+            "icon": "build/icon.png",
+            "artifactName": "${productName}-${version}-${arch}-win.${ext}"
+        },
+        "nsis": {
+            "oneClick": false,
+            "perMachine": false,
+            "allowToChangeInstallationDirectory": true,
+            "createDesktopShortcut": true,
+            "createStartMenuShortcut": true,
+            "shortcutName": "Y-REC",
+            "artifactName": "${productName}-${version}-${arch}-Setup.${ext}"
+        },
+        "portable": {
+            "artifactName": "${productName}-${version}-${arch}-Portable.${ext}"
+        },
+        "linux": {
+            "category": "AudioVideo",
+            "target": [
+                {
+                    "target": "AppImage",
+                    "arch": [
+                        "x64"
+                    ]
+                },
+                {
+                    "target": "deb",
+                    "arch": [
+                        "x64"
+                    ]
+                },
+                {
+                    "target": "rpm",
+                    "arch": [
+                        "x64"
+                    ]
+                }
+            ],
+            "icon": "build/icon.png",
+            "artifactName": "${productName}-${version}-${arch}-linux.${ext}",
+            "synopsis": "A distinctive screen recorder",
+            "description": "Y-REC — screen recorder with overlays, webcam PiP, keystroke display."
+        },
+        "publish": [
+            {
+                "provider": "github",
+                "releaseType": "release"
+            }
+        ]
     }
 }

@@ -53,7 +53,7 @@ export function SourceScreen() {
                     <Button
                         variant="ghost"
                         size="sm"
-                        onClick={refresh}
+                        onClick={() => refresh()}
                         iconLeft={<Glyph name="reload" />}
                         loading={loading}
                     >
