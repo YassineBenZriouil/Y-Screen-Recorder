@@ -1,56 +1,30 @@
 {
-    "name": "tron-forge",
-    "productName": "tron-forge",
-    "version": "1.0.0",
-    "description": "My Electron application description",
-    "main": "src/index.js",
-    "scripts": {
-        "start": "electron-forge start",
-        "package": "electron-forge package",
-        "make": "electron-forge make",
-        "publish": "electron-forge publish",
-        "lint": "echo \"No linting configured\""
-    },
-    "keywords": [],
-    "author": "jeffd23",
+    "name": "y-rec",
+    "productName": "Y·REC",
+    "version": "2.0.0",
+    "description": "Y·REC — a distinctive screen recorder",
+    "main": "out/main/index.js",
+    "author": "Yassine Ben Zriouil",
     "license": "MIT",
-    "config": {
-        "forge": {
-            "makers": [
-                {
-                    "name": "@electron-forge/maker-squirrel",
-                    "config": {
-                        "name": "tron_forge"
-                    }
-                },
-                {
-                    "name": "@electron-forge/maker-zip",
-                    "platforms": [
-                        "darwin"
-                    ]
-                },
-                {
-                    "name": "@electron-forge/maker-deb",
-                    "config": {}
-                },
-                {
-                    "name": "@electron-forge/maker-rpm",
-                    "config": {}
-                }
-            ]
-        }
-    },
-    "dependencies": {
-        "electron-squirrel-startup": "^1.0.0"
+    "scripts": {
+        "dev": "electron-vite dev",
+        "start": "electron-vite preview",
+        "build": "electron-vite build",
+        "typecheck": "tsc --noEmit -p tsconfig.node.json && tsc --noEmit -p tsconfig.web.json",
+        "lint": "echo \"lint not configured\""
     },
     "devDependencies": {
-        "@electron-forge/cli": "^6.0.0-beta.50",
-        "@electron-forge/maker-deb": "^6.0.0-beta.50",
-        "@electron-forge/maker-rpm": "^6.0.0-beta.50",
-        "@electron-forge/maker-squirrel": "^6.0.0-beta.50",
-        "@electron-forge/maker-zip": "^6.0.0-beta.50",
-        "devtron": "^1.4.0",
-        "electron": "8.0.2",
-        "electron-packager": "^17.1.2"
+        "@types/node": "^20.11.24",
+        "@types/react": "^18.2.60",
+        "@types/react-dom": "^18.2.19",
+        "@vitejs/plugin-react": "^4.2.1",
+        "electron": "^30.0.9",
+        "electron-vite": "^2.1.0",
+        "typescript": "^5.3.3",
+        "vite": "^5.1.4"
+    },
+    "dependencies": {
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0"
     }
 }

@@ -1,0 +1,67 @@
+:root {
+    /* Palette */
+    --void:      #0a0b10;
+    --panel:     #15171f;
+    --panel-2:   #1c1f29;
+    --panel-3:   #262a36;
+    --line:      #2a2e3c;
+    --line-2:    #3a3f52;
+    --ink:       #eef0f6;
+    --ink-2:     #c9ccd6;
+    --dim:       #7a7f92;
+    --dim-2:     #4a4f61;
+    --signal:    #ff2f5a;
+    --signal-2:  #ff5a7c;
+    --signal-glow: rgba(255, 47, 90, 0.35);
+    --phos:      #6effb0;
+    --phos-dim:  #3d8f66;
+    --phos-glow: rgba(110, 255, 176, 0.28);
+    --amber:     #ffb545;
+
+    /* Radii */
+    --radius-xs: 4px;
+    --radius-s:  6px;
+    --radius-m:  10px;
+    --radius-l:  16px;
+    --radius-xl: 22px;
+
+    /* Shadow */
+    --shadow-1: 0 1px 0 rgba(255, 255, 255, 0.03) inset,
+                0 8px 24px rgba(0, 0, 0, 0.4);
+    --shadow-lift: 0 20px 60px rgba(0, 0, 0, 0.55);
+    --shadow-focus: 0 0 0 3px var(--phos-glow);
+
+    /* Type */
+    --font-mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    --font-ui:   "Inter", -apple-system, "Segoe UI", Roboto, sans-serif;
+
+    /* Motion */
+    --tick:  120ms ease-out;
+    --swing: 220ms cubic-bezier(0.2, 0.8, 0.2, 1);
+
+    /* Spacing scale */
+    --s-1: 4px;
+    --s-2: 8px;
+    --s-3: 12px;
+    --s-4: 16px;
+    --s-5: 20px;
+    --s-6: 24px;
+    --s-7: 32px;
+    --s-8: 40px;
+    --s-9: 56px;
+
+    /* Type sizes */
+    --fs-11: 11px;
+    --fs-12: 12px;
+    --fs-13: 13px;
+    --fs-14: 14px;
+    --fs-16: 16px;
+    --fs-18: 18px;
+    --fs-22: 22px;
+    --fs-28: 28px;
+    --fs-36: 36px;
+    --fs-56: 56px;
+    --fs-84: 84px;
+    --fs-120: 120px;
+    --fs-220: 220px;
+}

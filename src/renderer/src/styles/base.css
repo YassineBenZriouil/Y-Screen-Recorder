@@ -1,0 +1,297 @@
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+*:focus { outline: none; }
+*:focus-visible {
+    outline: 2px solid var(--phos);
+    outline-offset: 2px;
+    border-radius: 4px;
+}
+
+html, body, #root { height: 100%; }
+body {
+    font-family: var(--font-ui);
+    font-size: var(--fs-14);
+    color: var(--ink);
+    background: var(--void);
+    -webkit-font-smoothing: antialiased;
+    overflow: hidden;
+    user-select: none;
+}
+
+button {
+    font: inherit;
+    color: inherit;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+button:disabled { cursor: not-allowed; }
+
+img { display: block; }
+
+/* ---------------- Shell ---------------- */
+.shell {
+    position: relative;
+    height: 100vh;
+    display: grid;
+    grid-template-rows: auto auto 1fr;
+    background:
+        radial-gradient(1200px 600px at 50% -10%, rgba(110, 255, 176, 0.04), transparent 60%),
+        radial-gradient(1000px 500px at 100% 110%, rgba(255, 47, 90, 0.05), transparent 60%),
+        var(--void);
+}
+
+.topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--s-6);
+    padding: var(--s-4) var(--s-6);
+    border-bottom: 1px solid var(--line);
+    -webkit-app-region: drag;
+}
+.topbar button, .topbar input, .topbar a { -webkit-app-region: no-drag; }
+
+.topbar__hints {
+    display: flex;
+    gap: var(--s-4);
+    font-size: var(--fs-11);
+    color: var(--dim);
+    letter-spacing: 0.04em;
+}
+.topbar__hints span { display: inline-flex; align-items: center; gap: 6px; }
+
+.stepper-wrap {
+    padding: var(--s-3) var(--s-6);
+    border-bottom: 1px solid var(--line);
+    background: rgba(21, 23, 31, 0.4);
+}
+
+.content {
+    overflow-y: auto;
+    padding: var(--s-7) var(--s-6) var(--s-8);
+    display: flex;
+    justify-content: center;
+}
+
+.screen {
+    width: 100%;
+    max-width: 900px;
+    display: flex;
+    flex-direction: column;
+    gap: var(--s-7);
+}
+.screen--rec, .screen--review { max-width: 1000px; }
+.screen__foot {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: var(--s-3);
+    padding-top: var(--s-5);
+    border-top: 1px solid var(--line);
+}
+.screen__foot--record {
+    justify-content: space-between;
+}
+.foot-note {
+    color: var(--dim);
+    font-size: var(--fs-13);
+    margin-right: auto;
+}
+.foot-hint {
+    color: var(--dim);
+    font-size: var(--fs-13);
+    display: inline-flex;
+    align-items: center;
+    gap: var(--s-2);
+}
+
+/* ---------------- Section header ---------------- */
+.section-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: var(--s-4);
+    padding-bottom: var(--s-3);
+    border-bottom: 1px solid var(--line);
+}
+.section-header__eyebrow {
+    font-family: var(--font-mono);
+    font-size: var(--fs-11);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--phos);
+    margin-bottom: var(--s-2);
+}
+.section-header__title {
+    font-size: var(--fs-28);
+    font-weight: 600;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+}
+.section-header__desc {
+    margin-top: var(--s-2);
+    color: var(--dim);
+    max-width: 60ch;
+    line-height: 1.55;
+}
+
+/* ---------------- Banner / empty ---------------- */
+.banner {
+    padding: var(--s-3) var(--s-4);
+    border-radius: var(--radius-m);
+    font-size: var(--fs-13);
+}
+.banner--error {
+    background: rgba(255, 47, 90, 0.08);
+    border: 1px solid rgba(255, 47, 90, 0.35);
+    color: var(--signal-2);
+}
+
+.empty {
+    padding: var(--s-8);
+    text-align: center;
+    color: var(--dim);
+    font-family: var(--font-mono);
+    font-size: var(--fs-13);
+    letter-spacing: 0.04em;
+    border: 1px dashed var(--line);
+    border-radius: var(--radius-m);
+}
+
+/* ---------------- Inputs ---------------- */
+.input {
+    padding: 10px 14px;
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-m);
+    color: var(--ink);
+    font: inherit;
+    font-size: var(--fs-13);
+    min-width: 220px;
+    transition: border-color var(--tick);
+}
+.input::placeholder { color: var(--dim-2); }
+.input:focus { border-color: var(--phos-dim); }
+
+/* ---------------- Custom scrollbar ---------------- */
+/* Firefox */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: var(--line-2) transparent;
+}
+
+/* WebKit / Chromium (Electron) */
+*::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
+}
+*::-webkit-scrollbar-track {
+    background: transparent;
+    border-left: 1px solid var(--line);
+}
+*::-webkit-scrollbar-track:horizontal {
+    border-left: none;
+    border-top: 1px solid var(--line);
+}
+*::-webkit-scrollbar-thumb {
+    background: linear-gradient(
+        180deg,
+        var(--line-2) 0%,
+        var(--panel-3) 50%,
+        var(--line-2) 100%
+    );
+    border: 3px solid transparent;
+    background-clip: padding-box;
+    border-radius: 999px;
+    min-height: 40px;
+    transition: background var(--tick);
+}
+*::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(
+        180deg,
+        var(--phos-dim) 0%,
+        var(--phos) 50%,
+        var(--phos-dim) 100%
+    );
+    background-clip: padding-box;
+    border: 3px solid transparent;
+    box-shadow: 0 0 12px var(--phos-glow) inset;
+}
+*::-webkit-scrollbar-thumb:active {
+    background: linear-gradient(
+        180deg,
+        var(--signal) 0%,
+        var(--signal-2) 50%,
+        var(--signal) 100%
+    );
+    background-clip: padding-box;
+    border: 3px solid transparent;
+    box-shadow: 0 0 16px var(--signal-glow) inset;
+}
+*::-webkit-scrollbar-corner {
+    background: transparent;
+}
+
+/* Signature tick marks flanking the thumb — subtle broadcast-monitor feel */
+*::-webkit-scrollbar-button {
+    display: block;
+    height: 6px;
+    background:
+        repeating-linear-gradient(
+            to right,
+            var(--line) 0 1px,
+            transparent 1px 4px
+        );
+    border: none;
+}
+*::-webkit-scrollbar-button:horizontal {
+    width: 6px;
+    background:
+        repeating-linear-gradient(
+            to bottom,
+            var(--line) 0 1px,
+            transparent 1px 4px
+        );
+}
+
+/* Utility: hide scrollbar entirely on a container */
+.no-scrollbar {
+    scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar { display: none; }
+
+/* ---------------- Scanlines ---------------- */
+.scanlines {
+    pointer-events: none;
+    position: fixed;
+    inset: 0;
+    background: repeating-linear-gradient(
+        to bottom,
+        transparent 0,
+        transparent 2px,
+        rgba(255, 255, 255, 0.02) 3px,
+        transparent 4px
+    );
+    mix-blend-mode: overlay;
+    z-index: 300;
+}
+
+/* ---------------- Motion respect ---------------- */
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.001ms !important;
+        transition-duration: 0.001ms !important;
+    }
+}
+
+/* ---------------- Small screens ---------------- */
+@media (max-width: 720px) {
+    .section-header { flex-direction: column; align-items: flex-start; }
+    .content { padding: var(--s-5) var(--s-4) var(--s-6); }
+    .screen__foot { flex-direction: column; align-items: stretch; }
+    .foot-note { margin-right: 0; }
+}
