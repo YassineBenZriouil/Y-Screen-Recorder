@@ -1,0 +1,24 @@
+#!/bin/bash
+# electron-builder bundles an old fpm (1.9.3) that stages files under the
+# "buildroot" macro it passes via `--define buildroot <path>`. Newer rpmbuild
+# (this machine has v6+) ignores that macro and computes its own nested
+# BUILDROOT path instead, so the build fails with "File not found". Passing
+# the real --buildroot flag (rpmbuild has always supported this) makes it
+# honor the same path fpm already staged files in.
+args=("$@")
+buildroot=""
+for i in "${!args[@]}"; do
+  if [ "${args[$i]}" = "--define" ]; then
+    next="${args[$((i + 1))]}"
+    case "$next" in
+      "buildroot "*) buildroot="${next#buildroot }" ;;
+    esac
+  fi
+done
+
+extra=()
+if [ -n "$buildroot" ]; then
+  extra=(--buildroot "$buildroot")
+fi
+
+exec /usr/bin/rpmbuild "${extra[@]}" "${args[@]}"

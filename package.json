@@ -17,11 +17,11 @@
     "lint": "echo \"lint not configured\"",
     "postinstall": "electron-builder install-app-deps",
     "bump": "npm --no-git-tag-version version patch",
-    "dist": "npm run bump && npm run build && electron-builder",
-    "dist:win": "npm run bump && npm run build && electron-builder --win",
-    "dist:mac": "npm run bump && npm run build && electron-builder --mac",
-    "dist:linux": "npm run bump && npm run build && electron-builder --linux",
-    "dist:all": "npm run bump && npm run build && electron-builder --win --mac --linux",
+    "dist": "npm run build && PATH=\"$PWD/build/rpmbuild-shim:$PATH\" electron-builder",
+    "dist:win": "npm run build && electron-builder --win",
+    "dist:mac": "npm run build && electron-builder --mac",
+    "dist:linux": "npm run build && PATH=\"$PWD/build/rpmbuild-shim:$PATH\" electron-builder --linux",
+    "dist:all": "npm run build && PATH=\"$PWD/build/rpmbuild-shim:$PATH\" electron-builder --win --mac --linux",
     "release": "npm version patch -m \"release %s\" && git push && git push --tags",
     "release:minor": "npm version minor -m \"release %s\" && git push && git push --tags",
     "release:major": "npm version major -m \"release %s\" && git push && git push --tags"
@@ -150,5 +150,9 @@
         "releaseType": "release"
       }
     ]
+  },
+  "allowScripts": {
+    "electron@30.5.1": true,
+    "esbuild@0.21.5": true
   }
 }
