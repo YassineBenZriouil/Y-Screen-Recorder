@@ -1,7 +1,7 @@
 {
   "name": "y-rec",
   "productName": "Y-REC",
-  "version": "2.0.2",
+  "version": "2.0.3",
   "description": "Y-REC - a distinctive screen recorder",
   "main": "out/main/index.js",
   "author": {
